@@ -25,7 +25,7 @@ const AdminDashboard = ({ courses, setCourses }) => {
     fetchCourses();
   }, [setCourses]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
 
     if (editingId) {
@@ -40,6 +40,16 @@ const AdminDashboard = ({ courses, setCourses }) => {
       // Add new course
       const newCourse = { ...formData, id: Date.now() }; // Create a new course with a unique ID
       setCourses([...courses, newCourse]); // Add new course to local state
+      try{
+const response = await axios.post (
+" http://localhost:3000/api/admin",
+formData
+);
+
+setCourses([…courses,response.data]);
+}catch(error) { 
+console.error("Error adding course: " ,error );
+}
     }
 
     // Clear form data
